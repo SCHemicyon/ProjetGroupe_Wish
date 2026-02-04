@@ -53,7 +53,7 @@ export async function addProductInBasket(req, res) {
         const basket = await getBasketbyIDRequest(id);
         const basketContent = basket[0]["content"];
         basketContent.push(req.body.content);
-        await updateBasketRequest(id, { content: basketContent });
+        await updateBasketRequest(id, basketContent);
         res.json({ok : true});
     }
     catch (err) {
