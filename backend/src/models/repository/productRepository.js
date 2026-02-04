@@ -28,3 +28,8 @@ export async function modifyProductRequest(id, object){
 export async function deleteProductRequest(id) {
     return await Product.deleteOne({_id : id});
 }
+
+export async function getAvailableProductsRequest() {
+    // On cherche les produits dont le stock est strictement supérieur à 0
+    return await Product.find({ stock: { $gt: 0 } });
+}

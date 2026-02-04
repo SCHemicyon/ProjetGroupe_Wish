@@ -1,4 +1,4 @@
-import { addProductRequest, deleteProductRequest, getProductbyIDRequest, getProductsbyCategoryRequest, getProductsRequest, modifyProductRequest } from "../models/repository/productRepository.js";
+import { addProductRequest, deleteProductRequest, getProductbyIDRequest, getProductsbyCategoryRequest, getProductsRequest, modifyProductRequest, getAvailableProductsRequest } from "../models/repository/productRepository.js";
 
 
 export async function getProducts(req, res) {
@@ -70,5 +70,21 @@ export async function deleteProduct(req, res) {
     catch (err) {
         console.error(err);
         res.json({ ok: false });
+    }
+}
+
+// Fonction pour que l'utilisateur puisse consulter les produits en stock
+export async function getAvailableProducts(req, res) {
+    try {
+        // On appelle la fonction du repository qui fait le filtre stock > 0
+        const products = await getAvailableProductsRequest();
+        
+        // On renvoie les produits trouvés au format JSON
+        res.json(products);
+    }
+    catch (err) {
+        // Si la base de données a un problème, on log l'erreur et on prévient le front
+        console.error(err);
+        res.json({ ok: false, message: "Impossible de charger les produits disponibles." });
     }
 }
