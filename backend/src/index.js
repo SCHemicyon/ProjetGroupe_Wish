@@ -6,6 +6,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import productRouter from './routes/productRouter.js';
+import { basketRouter } from './routes/basketRouter.js';
 
 // Connextion et configuration base de donnée mongodb
 mongoose.connect(process.env.DATABASE_URL)
@@ -16,6 +17,7 @@ const app = express()
 app.use(express.json())
 app.use(cors()) 
 app.use(productRouter)
+app.use(basketRouter)
 
 // Ecoute sur le port dans le .env
 app.listen(process.env.PORT, (error) => {
