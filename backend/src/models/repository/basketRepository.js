@@ -12,16 +12,15 @@ export async function getBasketsbyUserIDRequest(userID) {
     return await Basket.find({"user" : userID});
 }
 
-export async function createBasketRequest(user, content, total) {
-    
-    const basket = new Basket({user, content, total});
+export async function createBasketRequest(params) {
+    const basket = new Basket(params);
     return await basket.save();
 }
 
-export async function modifyBasketRequest(id, object){
-    return await Product.updateOne({_id : id}, object);
+export async function updateBasketRequest(id, content){
+    return await Basket.updateOne({_id : id}, { content : content });
 }
 
-export async function deleteBasketRequest(id) {
-    return await Product.deleteOne({_id : id});
+export async function emptyBasketRequest(id) {
+    return await Basket.deleteOne({_id : id});
 }
