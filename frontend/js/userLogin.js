@@ -14,6 +14,11 @@ loginForm.addEventListener("submit", async (event) =>{
             'Content-type' : "application/json"
         }
     });
+    const resJson = await response.json()
+    
+    sessionStorage.setItem("id", resJson.id);
+    window.location = "http://127.0.0.1:5500/frontend/userProductView.html"
     return response
     
 })
+
