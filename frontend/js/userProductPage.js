@@ -25,10 +25,27 @@ async function displayProducts() {
     } catch (error) { console.error("Erreur affichage :", error); }
 }
 
-// 2. Ajouter au panier (Baisse le stock en base de données)
-window.commander = async function(id, name, price, currentStock) {
-    if (currentStock <= 0) return alert("Rupture de stock !");
+//  Ajouter au panier (Baisse le stock en base de données)
+window.commander = async function (id, name, price, currentStock) {
     try {
+        if (!sessionStorage.getItem("basket_id")) {
+            let userID = sessionStorage.getItem("id");
+            let content = [];
+            let total = 0
+            const response = await fetch(`http://localhost:3000/baskets`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userID, content, total })
+            });
+            newBasket = await response.json();
+            sessionStorage.setItem("basket_id", newBasket._id);
+        }
+        if (currentStock <= 0) return alert("Rupture de stock !");
+        const addProduct = await fetch(`http://localhost:3000/baskets/id/${sessionStorage.getItem("basket_id")}/add`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id, price })
+        });
         const response = await fetch(`http://localhost:3000/products/modify/${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -36,49 +53,29 @@ window.commander = async function(id, name, price, currentStock) {
         });
         const result = await response.json();
         if (result.ok) {
-            panier.push({ id, name, price });
             updateCartUI();
             displayProducts(); // Met à jour l'affichage du stock
         }
     } catch (error) { console.error("Erreur commande :", error); }
 };
 
-// 3. Supprimer du panier (VISUEL UNIQUEMENT)
-//  ajouter la logique de remise en stock plus tard
-window.supprimerDuPanier = function(index) {
-    panier.splice(index, 1); // On retire juste du tableau local
-    updateCartUI(); // On rafraîchit la petite fenêtre
-};
-
-// 4. Interface du Panier
-function updateCartUI() {
+// Interface du Panier
+async function updateCartUI() {
+    const response = await fetch(`http://localhost:3000/baskets/id/${sessionStorage.getItem("basket_id")}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        });
+    const length = await response.json();
     const cartCount = document.getElementById("cart-count");
-    const list = document.getElementById("cart-items-list");
-    const totalEl = document.getElementById("cart-total");
 
-    if (cartCount) cartCount.innerText = panier.length;
-    if (list) {
-        if (panier.length === 0) {
-            list.innerHTML = "<p style='text-align:center;'>Le panier est vide.</p>";
-        } else {
-            list.innerHTML = panier.map((item, index) => `
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">
-                    <span>${item.name} - ${item.price} €</span>
-                    <button onclick="supprimerDuPanier(${index})" style="background:none; border:none; color:red; cursor:pointer; font-size:20px;">&times;</button>
-                </div>`).join("");
-        }
-    }
-    if (totalEl) {
-        totalEl.innerText = `Total : ${panier.reduce((sum, item) => sum + item.price, 0)} €`;
-    }
+    if (cartCount) cartCount.innerText = length.content.length;
 }
 
-window.toggleModal = function() {
-    const modal = document.getElementById("cart-modal");
-    if (modal) modal.style.display = (modal.style.display === "none" || modal.style.display === "") ? "block" : "none";
+window.toggleModal = function () {
+    window.location = "http://127.0.0.1:5500/frontend/basketView.html";
 };
 
-window.validerAchat = function() {
+window.validerAchat = function () {
     if (panier.length === 0) return alert("Panier vide !");
     alert("Merci pour votre achat !");
     panier = [];
@@ -87,4 +84,5 @@ window.validerAchat = function() {
 };
 
 displayProducts();
+updateCartUI();
 

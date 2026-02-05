@@ -14,7 +14,8 @@ export async function getBasketsbyUserIDRequest(userID) {
 
 export async function createBasketRequest(params) {
     const basket = new Basket(params);
-    return await basket.save();
+    await basket.save();
+    return basket._id
 }
 
 export async function updateBasketRequest(id, content, total){

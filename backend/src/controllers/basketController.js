@@ -39,8 +39,8 @@ export async function getBasketsbyUserID(req, res) {
 export async function createBasket(req, res) {
     const basketData = req.body;
     try {
-        await createBasketRequest(basketData)
-        res.json({ ok: true });
+        let basketID = await createBasketRequest(basketData)
+        res.json({ ok: true, _id: basketID });
     }
     catch (err) {
         console.error(err);
@@ -50,16 +50,13 @@ export async function createBasket(req, res) {
 
 export async function addProductInBasket(req, res) {
     const { id } = req.params;
-    let newStock;
     let newTotal;
     try {
         const basket = await getBasketbyIDRequest(id);
         const basketContent = basket.content;
-        basketContent.push(req.body._id);
-        newStock = req.body.stock - 1;
+        basketContent.push(req.body.id);
         newTotal = basket.total + req.body.price;
         await updateBasketRequest(id, basketContent, newTotal);
-        await modifyProductRequest(req.body._id, {stock: newStock});
         res.json({ ok: true });
     }
     catch (err) {
