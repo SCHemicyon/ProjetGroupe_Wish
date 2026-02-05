@@ -17,8 +17,8 @@ export async function createBasketRequest(params) {
     return await basket.save();
 }
 
-export async function updateBasketRequest(id, content){
-    return await Basket.updateOne({_id : id}, { content : content });
+export async function updateBasketRequest(id, content, total){
+    return await Basket.updateOne({_id : id}, { content : content, total : total });
 }
 
 export async function emptyBasketRequest(id) {
