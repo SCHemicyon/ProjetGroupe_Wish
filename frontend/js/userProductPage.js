@@ -16,7 +16,7 @@ async function displayProducts() {
                     <p style="color: #666;">${product.category}</p>
                     <p style="font-size: 1.2em; font-weight: bold;">${product.price} €</p>
                     <p id="stock-${product._id}">Stock : ${product.stock}</p>
-                    <button onclick="commander('${product._id}', '${product.name}', ${product.price}, ${product.stock})" 
+                    <button onclick="commander('${product._id}', ${product.price}, ${product.stock})" 
                             style="background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
                         Ajouter au panier
                     </button>
@@ -26,7 +26,7 @@ async function displayProducts() {
 }
 
 //  Ajouter au panier (Baisse le stock en base de données)
-window.commander = async function (id, name, price, currentStock) {
+window.commander = async function (id, price, currentStock) {
     try {
         if (!sessionStorage.getItem("basket_id")) {
             let userID = sessionStorage.getItem("id");
