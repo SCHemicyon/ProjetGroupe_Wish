@@ -1,6 +1,6 @@
 const basketList = document.querySelector("#basketList");
 
-async function getBasketContent() {
+async function getBasket() {
     let basketId = "698345deb336a2133bc19ba8"
     const response = await fetch(`http://localhost:3000/baskets/id/${basketId}`, {
         method: "GET",
@@ -8,13 +8,17 @@ async function getBasketContent() {
             "Content-type": "application/json"
         }
     });
-    const basketContent = await response.json(); 
-    return basketContent.content;
+    const basket = await response.json();
+    return basket;
 }
 
 async function displayBasket() {
-    const basketContent = await getBasketContent();
+    const basket = await getBasket();
+    const basketContent = basket.content;
     basketList.replaceChildren();
+    let total = document.createElement("p");
+    total.textContent = basket.total;
+    basketList.appendChild(total);
     let article;
     let name;
     let price;
@@ -29,7 +33,7 @@ async function displayBasket() {
         remove.textContent = "Supprimer du panier";
         remove.addEventListener("click", (e) => {
             e.preventDefault();
-            removeProductFromBasket();
+            removeProductFromBasket(product._id, product.stock, product.price);
         })
         article.appendChild(name);
         article.appendChild(price);
@@ -38,8 +42,17 @@ async function displayBasket() {
     });
 }
 
-displayBasket()
-
-async function removeProductFromBasket() {
-
+async function removeProductFromBasket(_id, stock, price) {
+    let basketId = "698345deb336a2133bc19ba8"
+    const response = await fetch(`http://localhost:3000/baskets/id/${basketId}/remove`, {
+        method: "PATCH",
+        body: JSON.stringify({ _id, stock, price }),
+        headers: {
+            "Content-type": "application/json"
+        }
+    });
+    displayBasket();
+    return;
 }
+
+displayBasket()

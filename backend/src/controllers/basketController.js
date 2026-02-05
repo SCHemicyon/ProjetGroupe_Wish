@@ -1,4 +1,5 @@
 import { createBasketRequest, emptyBasketRequest, getBasketbyIDRequest, getBasketsbyUserIDRequest, getBasketsRequest, updateBasketRequest } from "../models/repository/basketRepository.js";
+import { modifyProductRequest } from "../models/repository/productRepository.js";
 
 export async function getBaskets(req, res) {
     try {
@@ -39,7 +40,7 @@ export async function createBasket(req, res) {
     const basketData = req.body;
     try {
         await createBasketRequest(basketData)
-        res.json({ok : true});
+        res.json({ ok: true });
     }
     catch (err) {
         console.error(err);
@@ -51,10 +52,10 @@ export async function addProductInBasket(req, res) {
     const { id } = req.params;
     try {
         const basket = await getBasketbyIDRequest(id);
-        const basketContent = basket[0]["content"];
+        const basketContent = basket.content;
         basketContent.push(req.body.content);
         await updateBasketRequest(id, basketContent);
-        res.json({ok : true});
+        res.json({ ok: true });
     }
     catch (err) {
         console.error(err);
@@ -64,15 +65,21 @@ export async function addProductInBasket(req, res) {
 
 export async function removeProductFromBasket(req, res) {
     const { id } = req.params;
+    let index = -1;
+    let newStock;
+    let newTotal;
     try {
         const basket = await getBasketbyIDRequest(id);
-        const basketContent = basket[0]["content"];
-        const index = basketContent.indexOf(req.body.content);
+        const basketContent = basket.content;
+        index = basketContent.findIndex((product) => product._id == req.body._id)
         if (index >= 0) {
+            newStock = req.body.stock + 1;
+            newTotal = basket.total - req.body.price;
             basketContent.splice(index, 1);
         }
-        await updateBasketRequest(id, basketContent);
-        res.json({ok : true});
+        await updateBasketRequest(id, basketContent, newTotal);
+        await modifyProductRequest(req.body._id, {stock: newStock});
+        res.json({ ok: true });
     }
     catch (err) {
         console.error(err);
@@ -84,7 +91,7 @@ export async function emptyBasket(req, res) {
     const { id } = req.params;
     try {
         await emptyBasketRequest(id);
-        res.json({ok : true});
+        res.json({ ok: true });
     }
     catch (err) {
         console.error(err);
