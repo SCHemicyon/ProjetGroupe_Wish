@@ -1,7 +1,7 @@
 const basketList = document.querySelector("#basketList");
 
 async function getBasket() {
-    let basketId = "698345deb336a2133bc19ba8"
+    let basketId = sessionStorage.getItem("basket_id");
     const response = await fetch(`http://localhost:3000/baskets/id/${basketId}`, {
         method: "GET",
         headers: {
@@ -43,7 +43,7 @@ async function displayBasket() {
 }
 
 async function removeProductFromBasket(_id, stock, price) {
-    let basketId = "698345deb336a2133bc19ba8"
+    let basketId = sessionStorage.getItem("basket_id");
     const response = await fetch(`http://localhost:3000/baskets/id/${basketId}/remove`, {
         method: "PATCH",
         body: JSON.stringify({ _id, stock, price }),
