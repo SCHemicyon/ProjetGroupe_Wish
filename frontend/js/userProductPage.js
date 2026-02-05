@@ -1,5 +1,6 @@
 const productList = document.getElementById("product-list");
 let panier = [];
+const btndeconnexion = document.querySelector("#deconnexion");
 
 // 1. Afficher les produits 
 async function displayProducts() {
@@ -85,4 +86,15 @@ window.validerAchat = function () {
 
 displayProducts();
 updateCartUI();
+
+
+// deconnexion et revenir sur la partie connexion
+
+btndeconnexion.addEventListener("click", async (event) => {
+    event.preventDefault();
+    sessionStorage.clear();
+    window.location = "http://127.0.0.1:5500/frontend/userLogin.html"
+    
+})
+
 
