@@ -17,6 +17,7 @@ loginForm.addEventListener("submit", async (event) =>{
     const resJson = await response.json()
     
     sessionStorage.setItem("id", resJson.id);
+    sessionStorage.setItem("role", resJson.role);
     window.location = "http://127.0.0.1:5500/frontend/userProductView.html"
     return response
     

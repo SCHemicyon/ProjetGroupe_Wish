@@ -70,7 +70,7 @@ export async function connectUser(req, res){
         const user = await User.find({email: req.body.email, password: req.body.password})
     //Trouver l'identifiant et le mot de passe
         if(user!== null){
-            res.json({id: user[0]["_id"]})
+            res.json({id: user[0]["_id"], role: user[0]["role"]})
         }
         else{
             throw new Error("Identifiants invalides");
