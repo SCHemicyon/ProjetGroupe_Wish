@@ -23,7 +23,7 @@ async function displayBasket() {
     const basket = await getBasket();
     const basketContent = basket.content;
     basketList.replaceChildren();
-    let total = document.createElement("p");
+    let total = document.createElement("h2");
     if (basket.total) {
         total.textContent = `Total du panier : ${basket.total} €`;
     }
@@ -34,12 +34,13 @@ async function displayBasket() {
     let remove;
     basketContent.forEach(product => {
         article = document.createElement("article");
-        name = document.createElement("h2");
+        name = document.createElement("h3");
         name.textContent = product.name;
         price = document.createElement("p");
         price.textContent = `Prix : ${product.price} €`;
         remove = document.createElement("button");
-        remove.textContent = "Supprimer du panier";
+        remove.setAttribute("class", "remove");
+        remove.textContent = "X";
         remove.addEventListener("click", async (e) => {
             e.preventDefault();
             await removeProductFromBasket(product._id, product.stock, product.price);
@@ -68,9 +69,10 @@ async function removeProductFromBasket(_id, stock, price) {
     }
 }
 
-checkout.addEventListener("click", (e) => {
+checkout.addEventListener("click", async (e) => {
     e.preventDefault();
-    window.location = "http://127.0.0.1:5500/frontend/checkoutView.html";
+    const basket = await getBasket();
+    window.location = `http://127.0.0.1:5500/frontend/checkoutView.html?total=${basket.total}`;
 })
 
 empty.addEventListener("click", async (e) => {
