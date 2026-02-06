@@ -1,14 +1,65 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/checkoutView.css">
-    <title>Checkout</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./css/checkoutView.css" />
+  <title>Checkout</title>
 </head>
-<body>
-    <h1>Page de paiement</h1>
 
-    <script src="./js/checkoutView.js"></script>
+<body>
+
+  <header class="header">
+    <h1>Page de paiement</h1>
+  </header>
+
+
+
+
+
+  <main>
+    
+    <!-- <section class="recap">
+      <h2>Récapitulatifs de la commande</h2>
+
+    </section> -->
+
+  
+    <section class="paiement">
+      <h2>Paiement sécurisé</h2>
+
+      <section >
+        <h3>Informations de paiement</h3>
+
+        <form>
+          <div>
+            <label for="cardName">Nom sur la carte</label>
+            <input type="text" id="cardName" placeholder="Jean Dupont" required />
+          </div>
+
+          <div>
+            <label for="cardNumber">Numéro de carte</label>
+            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" required />
+          </div>
+          
+            <div>
+              <label for="expiry">Expiration</label>
+              <input type="text" id="expiry" placeholder="MM/AA" required />
+            </div>
+
+            <div>
+              <label for="cvv">CVV</label>
+              <input type="password" id="cvv" placeholder="123" required />
+            </div>
+        
+          <button type="submit">Payer</button>
+
+        </form>
+
+      </section>
+    </section>
+  </main>
+
+  <script src="./js/checkoutView.js"></script>
 </body>
 </html>
