@@ -172,3 +172,69 @@ function escapeHtml(text) {
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
 }
+//  GESTION DE L'HISTORIQUE DES COMMANDES (KEVIN) 
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    afficherCommandesAdmin();
+});
+
+async function afficherCommandesAdmin() {
+    const commandes = await recupererCommandes();
+    const conteneurCommandes = document.getElementById("container-orders");
+
+    if (!conteneurCommandes) return;
+
+    conteneurCommandes.innerHTML = ""; 
+
+    if (commandes.length === 0) {
+        let messageVide = document.createElement("p");
+        messageVide.textContent = "Aucune commande dans l'historique.";
+        conteneurCommandes.appendChild(messageVide);
+        return;
+    }
+
+    commandes.forEach((cmd) => {
+        let blocCommande = document.createElement("div");
+        
+        let titreCommande = document.createElement("h4");
+        titreCommande.textContent = "Commande n° " + cmd._id;
+
+        let infoClient = document.createElement("p");
+        
+        infoClient.textContent = "ID Client : " + (cmd.user || "Anonyme");
+
+        let montantTotal = document.createElement("p");
+        
+        montantTotal.textContent = "Montant total : " + (cmd.total || 0) + " €";
+
+        let nbrProduits = document.createElement("p");
+       
+        nbrProduits.textContent = "Nombre d'articles : " + (cmd.content ? cmd.content.length : 0);
+
+        let separateur = document.createElement("hr");
+
+        blocCommande.appendChild(titreCommande);
+        blocCommande.appendChild(infoClient);
+        blocCommande.appendChild(montantTotal);
+        blocCommande.appendChild(nbrProduits);
+        blocCommande.appendChild(separateur);
+
+        conteneurCommandes.appendChild(blocCommande);
+    });
+}
+
+async function recupererCommandes() {
+    try {
+        const response = await fetch("http://localhost:3000/api/basket", {
+            method: "GET",
+            headers: {
+                'Content-type': "application/json"
+            }
+        });
+        return await response.json();
+    } catch (error) {
+        console.error("Erreur lors de la récupération :", error);
+        return [];
+    }
+}
