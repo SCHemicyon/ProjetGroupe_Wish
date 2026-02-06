@@ -16,9 +16,7 @@ async function getBasket() {
         return basket;
     } catch (error) {
         console.error(error);
-
     }
-
 }
 
 async function displayBasket() {
@@ -64,7 +62,6 @@ async function removeProductFromBasket(_id, stock, price) {
                 "Content-type": "application/json"
             }
         });
-        
         return;
     } catch (error) {
         console.error(error);
@@ -77,38 +74,34 @@ checkout.addEventListener("click", (e) => {
 })
 
 empty.addEventListener("click", async (e) => {
-    try {
-        if (sessionStorage.getItem("basket_id")) {
+    if (sessionStorage.getItem("basket_id")) {
+        try {
             const basket = await getBasket();
             const basketContent = basket.content;
-            await new Promise((resolve, reject) => {
-                basketContent.forEach(async (product, index) => {
-                    console.log(product);
-                    
-                    await removeProductFromBasket(product._id, product.stock, product.price)
-                    if(index===basketContent.length-1) resolve()
+            basketContent.forEach(async (product) => {
+                let newStock = product.stock + 1;
+                let _id = product._id;
+                const response = await fetch(`http://localhost:3000/products/modify/${_id}`, {
+                    method: "PATCH",
+                    body: JSON.stringify({ stock: newStock }),
+                    headers: {
+                        "Content-type": "application/json"
+                    }
                 });
-            })
-
-            displayBasket();
-
-
-
-
-
-            // let basketId = sessionStorage.getItem("basket_id");
-            // const response = await fetch(`http://localhost:3000/baskets/id/${basketId}/empty`, {
-            //     method: "DELETE",
-            //     headers: {
-            //         "Content-type": "application/json"
-            //     }
-            // });
-            // sessionStorage.removeItem("basket_id");
-            
+            });
+            let basketId = sessionStorage.getItem("basket_id");
+            const response = await fetch(`http://localhost:3000/baskets/id/${basketId}/empty`, {
+                method: "DELETE",
+                headers: {
+                    "Content-type": "application/json"
+                }
+            });
+            sessionStorage.removeItem("basket_id");
+        } catch (error) {
+            console.error(error);
         }
-    } catch (error) {
-        console.error(error);
     }
+    displayBasket();
 })
 
 keepbuying.addEventListener("click", (e) => {
