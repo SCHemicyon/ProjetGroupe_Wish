@@ -1,3 +1,10 @@
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #c2c6d5, #8cd2a8);
+   
+}
+
+
 #deconnexion{
 background-color: rgb(202, 137, 26);
 color: white;
@@ -14,4 +21,17 @@ cursor: pointer;
 
 #deconnexion:active{
     transform: scale(0.90);
+}
+
+
+#profil{
+    background-color: grey;
+    color: white;
+
+}
+
+#admin{
+    background-color: grey;
+    color: white;
+
 }

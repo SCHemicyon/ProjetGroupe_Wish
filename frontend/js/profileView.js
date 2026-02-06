@@ -1,4 +1,5 @@
 const userId = sessionStorage.getItem("id");
+const btnaccueil = document.querySelector("#accueil")
 
 if (!userId || userId === "undefined") {
     console.error("Utilisateur non connecté");
@@ -39,3 +40,11 @@ async function displayOrderHistory() {
 }
 
 window.displayOrderHistory = displayOrderHistory;
+
+
+btnaccueil.addEventListener("click", async (event) =>{
+    event.preventDefault();
+    window.location = "http://127.0.0.1:5500/frontend/userProductView.html"
+
+
+})
