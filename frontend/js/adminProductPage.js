@@ -195,6 +195,8 @@ async function afficherCommandesAdmin() {
     }
 
     commandes.forEach((cmd) => {
+        console.log(cmd);
+        
         let blocCommande = document.createElement("div");
         
         let titreCommande = document.createElement("h4");
@@ -202,7 +204,7 @@ async function afficherCommandesAdmin() {
 
         let infoClient = document.createElement("p");
         
-        infoClient.textContent = "ID Client : " + (cmd.user || "Anonyme");
+        infoClient.textContent = "ID Client : " + (cmd.user.lastname) + " " + (cmd.user.firstname);
 
         let montantTotal = document.createElement("p");
         
@@ -226,7 +228,7 @@ async function afficherCommandesAdmin() {
 
 async function recupererCommandes() {
     try {
-        const response = await fetch("http://localhost:3000/api/basket", {
+        const response = await fetch("http://localhost:3000/baskets", {
             method: "GET",
             headers: {
                 'Content-type': "application/json"
