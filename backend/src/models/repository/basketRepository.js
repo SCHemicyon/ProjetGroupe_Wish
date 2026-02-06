@@ -1,11 +1,11 @@
 import {Basket} from "../entity/basket.js";
 
 export async function getBasketsRequest() {
-    return await Basket.find().populate('content');
+    return await Basket.find().populate('content').populate('user');
 }
 
 export async function getBasketbyIDRequest(id) {
-    return await Basket.findOne({_id : id}).populate('content');
+    return await Basket.findOne({_id : id}).populate('content').populate('user');
 }
 
 export async function getBasketsbyUserIDRequest(userID) {

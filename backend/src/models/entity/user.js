@@ -25,6 +25,13 @@ const userSchema = mongoose.Schema({
         minlength: 5,
         required: [true, "Le mot de passe est obligatoire"]
 
+    },
+
+    role: {
+        type: String,
+        enum : ["user", "admin"],
+        default : "user"
+
     }
     
 
