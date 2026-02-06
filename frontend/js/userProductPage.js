@@ -116,6 +116,6 @@ btnadministrateur.addEventListener("click", async (event) =>{
 
 })
 
-if (sessionStorage.getItem("role") == "user"){
-    btnadministrateur.style.display = "none"
+if (sessionStorage.getItem("role") == "admin"){
+    btnadministrateur.style.display = "inline"
 }
