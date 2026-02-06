@@ -73,3 +73,8 @@ button:hover {
 button:active {
     transform: scale(0.98);
 }
+
+a{
+    display: flex;
+    justify-content: center;
+}
