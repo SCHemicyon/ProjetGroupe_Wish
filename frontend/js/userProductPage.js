@@ -1,6 +1,10 @@
 const productList = document.getElementById("product-list");
 let panier = [];
 const btndeconnexion = document.querySelector("#deconnexion");
+const btnprofil = document.querySelector("#profil");
+const btnadministrateur = document.querySelector("#admin");
+
+
 
 // 1. Afficher les produits 
 async function displayProducts() {
@@ -30,13 +34,13 @@ async function displayProducts() {
 window.commander = async function (id, price, currentStock) {
     try {
         if (!sessionStorage.getItem("basket_id")) {
-            let userID = sessionStorage.getItem("id");
+            let user = sessionStorage.getItem("id");
             let content = [];
             let total = 0
             const response = await fetch(`http://localhost:3000/baskets`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userID, content, total })
+                body: JSON.stringify({ user, content, total })
             });
             newBasket = await response.json();
             sessionStorage.setItem("basket_id", newBasket._id);
@@ -97,4 +101,21 @@ btndeconnexion.addEventListener("click", async (event) => {
     
 })
 
+// lien vers mon profil
+btnprofil.addEventListener("click", async (event) =>{
+    event.preventDefault();
+    window.location = "http://127.0.0.1:5500/frontend/profileView.html"
+})
 
+
+
+btnadministrateur.addEventListener("click", async (event) =>{
+    event.preventDefault();
+    window.location = "http://127.0.0.1:5500/frontend/adminProductView.html"
+
+
+})
+
+if (sessionStorage.getItem("role") == user){
+    btnadministrateur.style.display = none
+}
